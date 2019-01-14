@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% load widget_tweaks %}
+{% load mytags %}
+{% block title %}SnapUp - New SnapUp Link{% endblock title %}
+{% block content %}
+    <body style="background-color: #eeeeee">
+    <div class="container" style="padding-top: 100px; ">
+        {% include 'side_menu.html' %}
+                    <center><div class="row">
+                        <div class="col-sm-8">
+                            <div class="modal-body">
+                                <span class="notify-badge-detail">Current Price:{% if currency != '' %} {{ currency }}{% else %}₦{% endif %}{{ price }}</span><br/>
+                                <h2>{{ title|capfirst }}</h2>
+                                <img class="img-responsive img-centered cover" style="width:500px; height:400px" src="{{ img_url }}" alt="">
+                                <ul class="list-inline">
+                                    <li>Snap Link Visits: 34</li>
+                                </ul>
+                                <center>
+                                <form method="post" action="{% url 'save_snap_link' %}" >
+                                    {% csrf_token %}
+                                    <input type="hidden" name="url" value="{{ url }}">
+                                    <input type="hidden" name="title" value="{{ title }}">
+                                    <input type="hidden" name="img_url" value="{{ img_url }}">
+                                    <input type="hidden" name="price" value="{{ price }}">
+                                    <input type="hidden" name="currency" value="{{ currency }}">
+                                    <div class="alert alert-info">
+                                        <input type="submit" value="Save To My Snap Links" class="btn btn-primary"><br/><small><strong>And Buy At Your Own Price</strong></small>
+                                    </div>
+                                </form>
+                                </center>
+                                </div>
+                        </div>
+                    </div></center>
+                </div>
+         <br/>
+    </div>
+    </body>
+{% endblock %}

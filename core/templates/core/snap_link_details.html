@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% load widget_tweaks %}
+{% load mytags %}
+{% block title %}SnapUp - SnapUp Link Details{% endblock title %}
+{% block content %}
+    <body style="background-color: #eeeeee">
+    <div class="container" style="padding-top: 100px;">
+    {% include 'side_menu.html' %}
+                    <center><div class="row">
+                        <div class="col-md-8">
+                            {% if messages %}
+                              <ul class="list-unstyled messages">
+                              {% for message in messages %}
+                                {% get_bootstrap_alert_msg_css_name message.tags as alert_tag %}
+                                <center class="alert alert-{{ alert_tag }}">{{ message }}</center>
+                              {% endfor %}
+                              </ul>
+                            {% endif %}
+                            <div class="modal-body">
+                                <span class="notify-badge-detail">Current Price: {% if snap_link.currency != '' %} {{ snap_link.currency }}{% else %}₦{% endif %}{{ snap_link.price }}</span><br/>
+                                <h2>{{ snap_link.title|capfirst }}</h2>
+                                <img class="img-responsive img-centered cover" style="width:500px; height:400px" src="{{ snap_link.img_url }}" alt=""><br/>
+                                <ul class="list-inline">
+                                    {% if user.username != snap_link.user %}
+                                    <li>SnapUp Linker: {{ snap_link.user }}</li>
+                                    {% endif %}
+                                    <li>Date Added: {{ snap_link.date_added }}</li><small>{{ snap_link.time_added }}</small>
+                                </ul>
+                                {% if user.username == snap_link.user %}
+                                <center>
+                                <a target="_blank" href="{{ snap_link.snap_link }}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Buy Now</a><br/><br/>
+                                    {% if  snap_link.notify_me_type != 'None' %}
+                                    <div class="alert alert-info">
+                                       <p><strong>You've already snapped this link to notify you when {% if  snap_link.notify_me_type == '1' %}
+                                        There's A Lower Price
+                                        {% elif  snap_link.notify_me_type == '2' %}
+                                           Price Decreases By {{ snap_link.percentage }}%
+                                        {% elif  snap_link.notify_me_type == '3' %}
+                                           Price is Equal To Your Own Set Price
+                                           {% else %}
+                                       {% endif %}</strong></p>
+                                    </div>
+                                    {% endif %}
+                                    <strong><small>Or Notify Me When Price Changes:</small></strong><br/>
+                                    <a href="{% url 'notify_me_type' link_id=snap_link.id id=1 %}"  class="btn btn-danger">To Any Lower Price</a> <button onclick = myHandlerForPercentage() class="btn btn-warning">By My Own Set Percentage</button> <button onclick = myHandlerForExactPrice()  class="btn btn-success">To My Own Set Price</button>
+                                </center>
+                                {% else %}
+                                    <div class="alert alert-info">
+                                        You can also snap the link by copying and go create your snap link.<br/>
+                                        Snap link: {{ snap_link.snap_link }}
+                                    </div>
+                                {% endif %}
+                                </div>
+                                <script>
+                                    function myHandlerForPercentage(){
+                                        swal({
+                                        title: "How Much Drop in percentage",
+                                        text: "Please enter by how much percentage you want the price to drop e.g 5, 10, 20, 30 etc... ",
+                                        type: "input",
+                                        inputType: "text",
+                                        html: true,
+                                        showCancelButton: true,
+                                        closeOnConfirm: false,
+                                        closeOnCancel: true
+                                    }, function(percentage) {
+
+                                        if (percentage === "") {
+                                            swal.showInputError("You need to enter percentage");
+                                            return false;
+                                        }
+
+                                        $.ajax({
+                                            url: "{% url 'notify_me_type' link_id=snap_link.id id=2 %}",
+                                            data: { percentage: percentage },
+                                            type: "GET"
+                                        })
+                                        .done(function(data) {
+                                            window.location.href = "{% url 'notify_me_type' link_id=snap_link.id id=2 %}"
+                                        })
+                                    });
+                                    }
+                                </script>
+                                <script>
+                                    function myHandlerForExactPrice(){
+                                        swal({
+                                        title: "How Much Do You Want To Buy",
+                                        text: "Please enter exact price you want the price to drop to e.g 4,000 , 15000 etc... ",
+                                        type: "input",
+                                        inputType: "text",
+                                        html: true,
+                                        showCancelButton: true,
+                                        closeOnConfirm: false,
+                                        closeOnCancel: true
+                                    }, function(percentage) {
+
+                                        if (percentage === "") {
+                                            swal.showInputError("You need to enter price");
+                                            return false;
+                                        }
+
+                                        $.ajax({
+                                            url: "{% url 'notify_me_type' link_id=snap_link.id id=3 %}",
+                                            data: { percentage: percentage },
+                                            type: "GET"
+                                        })
+                                        .done(function(data) {
+                                            window.location.href = "{% url 'notify_me_type' link_id=snap_link.id id=3 %}"
+                                        })
+                                    });
+                                    }
+                                </script>
+                        </div>
+                    </div></center>
+                </div>
+         <br/>
+    </div>
+    </body>
+{% endblock %}

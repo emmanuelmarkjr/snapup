@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load mytags %}
+{% block title %}SnapUp - Edit Profile{% endblock title %}
+{% block content %}
+    <body style="background-color: #eeeeee">
+    <div class="container" style="padding-top: 100px;padding-bottom: 10%">
+        {% if user.userprofile.picture.url != "" %}
+            <img src="{{ user.userprofile.picture.url }}" width = "150" height = "150" style="border-radius: 50%"  />
+        {% else %}
+            <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" width = "150" height = "150" style="border-radius: 50%" />
+        {% endif %}
+
+    {% include 'side_menu.html' %}
+                <div class="form-signin col-sm-8">
+                    {% if messages %}
+                      <ul class="list-unstyled messages">
+                      {% for message in messages %}
+                        {% get_bootstrap_alert_msg_css_name message.tags as alert_tag %}
+                        <center class="alert alert-{{ alert_tag }}">{{ message }}</center>
+                      {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <center><h4>Edit Your Profile</h4></center>
+                        <form method="post" action="{% url 'edit_profile' %}" class="form-signin" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {% render_field form.full_name class="form-control" placeholder=form.full_name.label %}
+                                {{ form.full_name.errors }}
+                            </div>
+                            <div class="form-group">
+                                {% render_field form.phone class="form-control" placeholder="Phone Number e.g 08111306490" %}
+                                {{ form.phone.errors }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.media }}
+                                {% render_field form.location class="form-control" placeholder="Nearest City e.g Ketu, Lekki, Alausa" %}
+                                {{ form.location.errors }}
+                            </div>
+                            <div class="form-group">
+                                {% render_field form.picture class="form-control" placeholder=form.picture.label %}
+                                {{ form.picture.errors }}
+                            </div>
+                            <div class="form-group">
+                                <center><input class="btn btn-lg btn-info btn-block" type="submit" value="Edit Profile" /></center>
+                                        <input type="hidden" name="next" value="{{ next }}" />
+                            </div>
+                        </form>
+                </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    </body>
+{% endblock %}

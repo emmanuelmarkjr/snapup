@@ -1,0 +1,9 @@
+{% load widget_tweaks %}
+<form method="post" action="{% url 'home' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {% render_field form.snap_link name="snap_link" class="form-control" placeholder="Paste Product URL Here From Konga, Jumia, Jiji, WakaNow, Hotels... " %}
+    </div>
+    {{ form.snap_link.errors }}
+    <button class="page-scroll btn btn-xl" type="submit">Submit Snap Link</button>
+</form>

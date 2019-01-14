@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}SnapUp - Dashboard {% endblock title %}
+{% block content %}
+    <body style="background-color: #eeeeee">
+    <div class="container" style="padding-top: 30px;padding-bottom: 12%">
+    <div class="alert alert-success" style="margin-top: 10%;">
+        <h4>{% if user.userprofile.picture.url != "" %}
+            <img src="{{ user.userprofile.picture.url }}" width = "60" height = "60" style="border-radius: 50%"  />
+        {% else %}
+            <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" width = "60" height = "60" style="border-radius: 50%" />
+        {% endif %}&nbsp&nbsp<strong>Hello! {{ user.get_username }}, </strong>&nbsp&nbspWelcome to your Dashboard
+        {% if request.user.username == 'snapup' %}
+        <a href="{% url 'check_price_change' %}" class="btn btn-sm btn-primary alignright">Check New Prices</a>
+    {% endif %}
+    </div>
+    {% if user.userprofile.phone == "" %}
+            <div class="alert alert-danger" >
+        <center><h5><strong>Profile Incomplete!!!</strong> Please Fill In Your Phone Number To Get Text Snap Alerts.</h5></center>
+        </div>
+        {% endif %}
+    {% include 'side_menu.html' %}
+        <center><h4>My Dashboard</h4></center>
+            <div class="col-sm-4">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Total Snap Links</h3>
+                </div>
+                <div class="panel-body">
+                  <a href="#">{{ user_dashboard_total_snap_links }}
+                      {% if user_dashboard_total_snap_links != 0 %}
+                        <small> View Details</small>
+                        {% else %}
+                        <small> No Details</small>
+                    {% endif %}
+                  </a>
+                </div>
+              </div>
+              <div class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Snap Links With No Price Set</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="#">{{ user_dashboard_total_unset_snap_links }}
+                        {% if user_dashboard_total_unset_snap_links != 0 %}
+                        <small> View Details</small>
+                        {% else %}
+                        <small> No Details</small>
+                    {% endif %}
+                    </a>
+                </div>
+              </div>
+            </div>
+               <div class="col-sm-4">
+              <div class="panel panel-success">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Snap Links With Price Set</h3>
+                </div>
+                <div class="panel-body">
+                  <a href="#">{{ user_dashboard_total_set_snap_links }}
+                      {% if user_dashboard_total_set_snap_links != 0 %}
+                        <small> View Details</small>
+                        {% else %}
+                        <small> No Details</small>
+                    {% endif %}
+                  </a>
+                </div>
+              </div>
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Snap Linker Points</h3>
+                </div>
+                <div class="panel-body">
+                      {{ snap_linker_points }} Points
+                </div>
+              </div>
+            </div>
+    </div>
+    </body>
+{% endblock content %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% load mytags %}
+{% block title %}SnapUp - My Snap Links{% endblock title %}
+{% block content %}
+    <body style="background-color: #eeeeee">
+    <div class="container" style="padding-top: 100px;">
+    {% include 'side_menu.html' %}
+    <center><h4>My Snap Links</h4></center>
+    <div id="portfolio" class="col-md-9">
+    <div class="alert {{ alert_class }}">
+        <center>{{ message }}</center>
+    </div>
+    {% if snap_links %}
+        <div class="row">
+                {% for link in snap_links %}
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    <a href="{% url 'snap_link_details' id=link.id %}" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+
+                        <span class="notify-badge">Current Price:{% if link.currency != ' ' %} {{ link.currency }}{% else %}₦{% endif %}{{ link.price }}</span>
+                        {% if link.img_url == "" %}
+                        <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" class="img-responsive" alt="">
+                        {% else %}
+                        <img src="{{ link.img_url }}" class="img-responsive" alt="">
+                        {% endif %}
+                    <div class="portfolio-caption">
+                        <h4>{{ link.title }}</h4>
+                        <p class="text-muted">Date Added:{{ link.date_added }}</p>
+                        <p class="text-muted">Snap Link Visits: 45</p>
+                        {% if link.notify_me_type != 'None' %}
+                        <div class="alert alert-success">
+                            <p><strong>Link Already Snapped</strong></p>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-danger">
+                            <p><strong>Link Not Yet Snapped</strong></p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-danger">
+            <center><p><strong>Oops!!!</strong> You have No Snap Links Currently....</p>
+            <a href="/" class="btn btn-sm btn-success">Submit Your First Snap Link</a>
+            </center>
+
+        </div>
+        </div>
+    {% endif %}
+    </div>
+    </body>
+{% endblock %}

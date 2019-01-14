@@ -1,0 +1,15 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}You're receiving this email because you requested a price notification on your snap links at {{ site_name }}.{% endblocktrans %}
+
+<h3><strong>{{ type }}</strong></h3>
+{% trans "Please go to the following link and purchase product:" %}
+{% block price_link %}
+{{ link }}
+{% endblock %}
+
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

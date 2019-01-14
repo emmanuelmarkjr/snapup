@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load staticfiles i18n %}
+
+{% block head %}
+    <link href="{% static 'css/signup.css' %}" rel="stylesheet">
+    {% block title %}SnapUp - Signup{% endblock title %}
+{% endblock head %}
+
+{% block content %}
+<body style="background-color: #eeeeee">
+    <div class="container" style="padding-top: 100px; padding-bottom: 10%;">
+	    <div class="col-sm-8 col-lg-offset-2">
+            <center><h2>{% trans 'Sign Up' %}</h2></center></center>
+                <form action="{% url 'register' %}" method="post" class="form-signin" role="form">
+                  {% csrf_token %}
+                  {% for field in form.visible_fields %}
+                    <div class="form-group{% if field.errors %} has-error{% endif %}">
+                      <small><strong><label style="color: #FA8072" for="{{ field.label }}">{{ field.label }}</label></strong></small>
+                      {{ field }}
+                      {% if field.help_text %}
+                        <span class="help-block">{{ field.help_text|safe }}</span>
+                      {% endif %}
+                      {% for error in field.errors %}
+                        <label class="control-label">{{ error }}</label>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                  <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Create an account' %}</button>
+                <br/><p align="left">Returning User? <a href="{% url 'login' %}">Login</a></p>
+                </form>
+        <br/>
+        <br/>
+        </div>
+  </div>
+  </body>
+{% endblock content %}
