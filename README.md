@@ -31,6 +31,6 @@ If you encounter a "no auth_profile table" error, then do the makemigrations and
 
 configure the mail settings to enable email sending on password reset. 
 
-python manage.py runserver to start your server 
+python manage.py runserver to start running your server 
 
 
